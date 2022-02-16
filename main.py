@@ -6,6 +6,9 @@ __author__ = 'ipetrash'
 
 import datetime as DT
 
+# pip install psutil
+import psutil
+
 from common import log
 from db import Task
 
@@ -56,6 +59,12 @@ def get_all_rids() -> list[str]:
         for action in task.actions:
             rid = f'{task.path}, hidden={task.hidden}, enabled={task.enabled}, action={action}'
             items.append(rid)
+
+    for service in psutil.win_service_iter():
+        title = f'{service.name()!r} ({service.display_name()})'
+        rid = f'{title}. Pid={service.pid()}, status={service.status()!r}, ' \
+              f'start_type={service.start_type()!r}, bin_path={service.binpath()}'
+        items.append(rid)
 
     return items
 
