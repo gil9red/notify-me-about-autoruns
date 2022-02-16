@@ -62,8 +62,7 @@ def get_all_rids() -> list[str]:
 
     for service in psutil.win_service_iter():
         title = f'{service.name()!r} ({service.display_name()})'
-        rid = f'{title}. Pid={service.pid()}, status={service.status()!r}, ' \
-              f'start_type={service.start_type()!r}, bin_path={service.binpath()}'
+        rid = f'{title}. bin_path={service.binpath()}'
         items.append(rid)
 
     return items
