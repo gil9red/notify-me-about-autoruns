@@ -134,6 +134,6 @@ if __name__ == '__main__':
     print()
 
     # Analog: SELECT MAX(LENGTH(rid)) FROM task;
-    max_rid_len = max(len(task.rid) for task in Task.select())
+    max_rid_len = max((len(task.rid) for task in Task.select()), default=0)
     print(max_rid_len)
     # 322
