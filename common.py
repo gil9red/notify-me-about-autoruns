@@ -10,16 +10,16 @@ import sys
 from logging.handlers import RotatingFileHandler
 from pathlib import Path
 
-from config import DIR_LOGS
+from config import DIR_LOGS, DIR
 
 
-def get_logger(file_name: str, dir_name='logs', encoding='utf-8'):
+def get_logger(name: str, dir_name='logs', encoding='utf-8'):
     dir_name = Path(dir_name).resolve()
     dir_name.mkdir(parents=True, exist_ok=True)
 
-    file_name = str(dir_name / Path(file_name).resolve().name) + '.log'
+    file_name = str(dir_name / Path(name).resolve().name) + '.log'
 
-    log = logging.getLogger(__name__)
+    log = logging.getLogger(name)
     log.setLevel(logging.DEBUG)
 
     formatter = logging.Formatter('[%(asctime)s] %(filename)s[LINE:%(lineno)d] %(levelname)-8s %(message)s')
@@ -39,4 +39,4 @@ def get_logger(file_name: str, dir_name='logs', encoding='utf-8'):
     return log
 
 
-log = get_logger('autoruns', DIR_LOGS)
+log = get_logger(DIR.name, DIR_LOGS)
