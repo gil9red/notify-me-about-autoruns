@@ -84,19 +84,19 @@ if __name__ == '__main__':
                 if Task.is_exists(rid):
                     continue
 
-                msg = f'Added new task: {rid}'
+                msg = f'Added new task: {rid!r}'
                 log.info(msg)
                 Task.create(rid=rid)
 
                 if not is_first_runs:
-                    add_notify(log.name, msg)
+                    add_notify(log.name, f'🆕 {msg}')
 
             # Deleted tasks
             prefix = f'[deleted from {DT.datetime.now():%Y-%m-%d %H:%M:%S}]'
             for task in Task.select().where(Task.deleted == False, Task.rid.not_in(rids)):
-                msg = f'Task #{task.id} rid={task.rid!r} is now mark as deleted!'
+                msg = f'Task deleted: {task.rid!r}'
                 log.info(msg)
-                add_notify(log.name, msg)
+                add_notify(log.name, f'❌ {msg}')
 
                 task.rid = f'{prefix} {task.rid}'
                 task.deleted = True
