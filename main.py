@@ -89,7 +89,7 @@ if __name__ == '__main__':
                 Task.create(rid=rid)
 
                 if not is_first_runs:
-                    add_notify(log.name, f'🆕 {msg}')
+                    add_notify(log.name, f'⚠️ {msg}')
 
             # Deleted tasks
             prefix = f'[deleted from {DT.datetime.now():%Y-%m-%d %H:%M:%S}]'
