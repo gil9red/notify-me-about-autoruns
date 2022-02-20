@@ -57,12 +57,12 @@ def get_all_rids() -> list[str]:
 
     for task in get_tasks():
         for action in task.actions:
-            rid = f'{task.path}, hidden={task.hidden}, enabled={task.enabled}, action={action}'
+            rid = f'[task] {task.path}, hidden={task.hidden}, action={action}'
             items.append(rid)
 
     for service in psutil.win_service_iter():
         title = f'{service.name()!r} ({service.display_name()})'
-        rid = f'{title}. bin_path={service.binpath()}'
+        rid = f'[service] {title}. bin_path={service.binpath()}'
         items.append(rid)
 
     return items
