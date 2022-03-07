@@ -5,6 +5,7 @@ __author__ = 'ipetrash'
 
 
 import datetime as DT
+import re
 
 # pip install psutil
 import psutil
@@ -30,6 +31,18 @@ from third_party.add_notify_telegram import add_notify
 
 def get_rids_from_simple_dict(d: dict) -> list[str]:
     return [f'{path} = {value}' for path, value in d.items()]
+
+
+def preprocess_rid(rid: str) -> str:
+    # Example: "[service] 'BcastDVRUserService_8dba0' (Пользовательская служба DVR для игр и трансляции_8dba0). bin_path=C:\Windows\system32\svchost.exe -k BcastDVRUserService"
+    #          ->
+    #          "[service] 'BcastDVRUserService' (Пользовательская служба DVR для игр и трансляции). bin_path=C:\Windows\system32\svchost.exe -k BcastDVRUserService"
+    # NOTE: https://superuser.com/q/1326078
+    m = re.search(r'(_[a-f0-9]+)\)', rid)
+    if m:
+        rid = rid.replace(m.group(1), '')
+
+    return rid
 
 
 def get_all_rids() -> list[str]:
@@ -65,7 +78,7 @@ def get_all_rids() -> list[str]:
         rid = f'[service] {title}. bin_path={service.binpath()}'
         items.append(rid)
 
-    return items
+    return sorted(set(preprocess_rid(rid) for rid in items))
 
 
 if __name__ == '__main__':
