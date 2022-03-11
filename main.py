@@ -102,14 +102,14 @@ if __name__ == '__main__':
                 Task.create(rid=rid)
 
                 if not is_first_runs:
-                    add_notify(log.name, f'⚠️ {msg}')
+                    add_notify(log.name, f'⚠️ {msg}', has_delete_button=True)
 
             # Deleted tasks
             prefix = f'[deleted from {DT.datetime.now():%Y-%m-%d %H:%M:%S}]'
             for task in Task.select().where(Task.deleted == False, Task.rid.not_in(rids)):
                 msg = f'Task deleted: {task.rid!r}'
                 log.info(msg)
-                add_notify(log.name, f'❌ {msg}')
+                add_notify(log.name, f'❌ {msg}', has_delete_button=True)
 
                 task.rid = f'{prefix} {task.rid}'
                 task.deleted = True
@@ -118,7 +118,7 @@ if __name__ == '__main__':
         except Exception as e:
             log.exception('Error:')
 
-            add_notify(log.name, f'ERROR: {e}', 'ERROR')
+            add_notify(log.name, f'ERROR: {e}', type='ERROR', has_delete_button=True)
             wait(hours=1)
             continue
 
