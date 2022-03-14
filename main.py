@@ -11,6 +11,7 @@ import re
 import psutil
 
 from common import log
+from config import FILE_NOT_NOTIFY
 from db import Task
 
 from third_party.winreg__examples.get_active_setup_installed_components import get_active_setup_components
@@ -101,7 +102,7 @@ if __name__ == '__main__':
                 log.info(msg)
                 Task.create(rid=rid)
 
-                if not is_first_runs:
+                if not is_first_runs and not FILE_NOT_NOTIFY.exists():
                     add_notify(log.name, f'⚠️ {msg}', has_delete_button=True)
 
             # Deleted tasks
@@ -109,7 +110,9 @@ if __name__ == '__main__':
             for task in Task.select().where(Task.deleted == False, Task.rid.not_in(rids)):
                 msg = f'Task deleted: {task.rid!r}'
                 log.info(msg)
-                add_notify(log.name, f'❌ {msg}', has_delete_button=True)
+
+                if not FILE_NOT_NOTIFY.exists():
+                    add_notify(log.name, f'❌ {msg}', has_delete_button=True)
 
                 task.rid = f'{prefix} {task.rid}'
                 task.deleted = True
@@ -118,7 +121,9 @@ if __name__ == '__main__':
         except Exception as e:
             log.exception('Error:')
 
-            add_notify(log.name, f'ERROR: {e}', type='ERROR', has_delete_button=True)
+            if not FILE_NOT_NOTIFY.exists():
+                add_notify(log.name, f'ERROR: {e}', type='ERROR', has_delete_button=True)
+
             wait(hours=1)
             continue
 

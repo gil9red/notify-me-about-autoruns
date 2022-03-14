@@ -16,3 +16,5 @@ DB_DIR_NAME = DIR / 'database'
 DB_DIR_NAME.mkdir(parents=True, exist_ok=True)
 
 DB_FILE_NAME = str(DB_DIR_NAME / 'database.sqlite')
+
+FILE_NOT_NOTIFY = DIR / 'NOT_NOTIFY'
